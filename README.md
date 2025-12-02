@@ -1,181 +1,160 @@
-📧 AI Mailer BOT – Automated Email Response System (Gmail + GPT + FAISS)
+📈🤖 AIMailer – AI-Powered Email Automation
 
-The AI Mailer BOT is an automated email-response system that reads unread Gmail emails, understands the query, searches for the most relevant answer from an FAQ Excel file using vector similarity, generates a clean email reply using GPT-3.5-turbo, and sends the response back to the user automatically.
 
-This bot is ideal for:
-✅ Customer service
-✅ Internal support teams
-✅ Automated FAQ-based responders
-✅ Helpdesk automation
+
+
+
+
+
+
+AIMailer is an AI-powered assistant that automates email processing, generates context-aware responses using AI, and integrates with a knowledge base for accurate answers. 
 
 🚀 Features
-✔ 1. Reads FAQs from Excel
 
-You maintain a simple Excel sheet (faq.xlsx) with two columns:
+📧 Automatic Email Processing – Fetch unread emails and extract user queries.
 
-Question	Answer
+🧠 AI-Powered Responses – Use embeddings, RAG, and LLMs to generate accurate replies.
 
-The BOT loads this file and embeds all questions using OpenAI embeddings.
+📚 Knowledge Base Integration – Search FAQs, documents, and internal resources.
 
-✔ 2. Creates a FAISS Vector Store
+⚡ Workflow Automation – Update email status (read/replied/pending) automatically.
 
-Converts FAQ questions into embeddings
 
-Stores them inside a FAISS index (faq.index)
 
-Supports fast similarity search for incoming queries
 
-✔ 3. Reads Unread Gmail Emails
-
-The bot scans the Gmail inbox using Gmail API and fetches unread emails.
-
-(Currently supports filtering by specific email sender.)
-
-✔ 4. Extracts Email Body (Handles multipart emails)
-
-Automatically extracts plain text email content—even from nested MIME structures.
-
-✔ 5. Vector Similarity Search
-
-When an email query arrives:
-
-Convert query → embedding
-
-Compare with FAISS index
-
-Retrieve top-k closest FAQ answers
-
-Apply a distance threshold to avoid irrelevant matches
-
-✔ 6. GPT-Powered Email Response
-
-Uses GPT-3.5-Turbo to generate a clean, professional, short email reply based ONLY on FAQ context.
-
-Rules include:
-
-Start with “Dear User,”
-
-Use only provided FAQ answers
-
-No hallucination
-
-2–4 sentence replies
-
-Close with “Thank you.”
-
-✔ 7. Sends Reply via Gmail
-
-Uses Gmail API to send the generated response back to the user.
-
-✔ 8. Marks Original Email as Read
-
-After replying, the bot marks the email as “READ”.
-
-🧱 Project Architecture
+🛠 Tech Stack
+<p> </a> <a href="https://streamlit.io/" target="_blank"><img src="https://streamlit.io/images/brand/streamlit-mark-color.svg" width="40" height="40" alt="Streamlit"/></a> 
+🧱 Project Structure
 AI Mailer Bot
 │
 ├── faq.xlsx               # Your FAQ database
 ├── faq.index              # FAISS Vector Index (auto-created)
 ├── token.json             # Gmail API token (auto-generated)
 ├── credentials.json       # Gmail OAuth credentials (you provide)
-├── main.py                # AI mailer bot script (your code)
-└── README.md              # Documentation
+├── main.py                # AI Mailer BOT script
+└── README.md              # Project documentation
 
-🔧 Installation & Setup
+🔧 Setup Instructions
+
+1️⃣ Clone the repository
+
+git clone https://github.com/<username>/<repo>.git
+
+
+
+2️⃣ Create & activate virtual environment
+
+python -m venv venv
+source venv/bin/activate     # Mac/Linux
+venv\Scripts\activate        # Windows
+
+Installation & Setup
 1️⃣ Install Python Dependencies
 pip install openai google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2 faiss-cpu pandas numpy
 
 2️⃣ Setup Gmail API Credentials
 
 Go to Google Cloud Console
+.
 
-Enable Gmail API
+Enable Gmail API.
 
-Create OAuth client ID → Desktop App
+Create OAuth client ID → Desktop App.
 
-Download credentials.json into the project folder
+Download credentials.json into the project folder.
 
-3️⃣ Add your FAQ Excel file
+3️⃣ Add Your FAQ Excel File
 
-Example structure:
+Create faq.xlsx with columns: Question and Answer.
 
-Question	Answer
-What is leave policy?	Employees get 12 casual leaves per year.
+4️⃣ Add OpenAI API Key
 
-Save as faq.xlsx.
-
-4️⃣ Add your OpenAI API Key
-
-Set inside the script:
+In the script:
 
 OPENAI_API_KEY = "your-key-here"
 
 
 Or via environment variable:
 
-export OPENAI_API_KEY="xxx"
+export OPENAI_API_KEY="your-key-here"
 
 ▶️ Running the BOT
-
-Run the script:
-
 python main.py
 
 
-The first time you run it:
+On first run, a browser window opens for Gmail login.
 
-A browser will open
+token.json is generated automatically.
 
-You will log in to your Gmail account
+Subsequent runs do not require login.
 
-token.json will be generated automatically
+🔄 Workflow
 
-After that, the bot runs without login.
+Load FAQ Excel
 
-🔄 How the BOT Works (Workflow)
-STEP 1 → Load FAQ Excel
-STEP 2 → Build or load FAISS vector index
-STEP 3 → Authenticate Gmail
-STEP 4 → Fetch unread emails
-STEP 5 → Extract user query
-STEP 6 → Search similar FAQ (FAISS)
-STEP 7 → Generate reply using GPT-3.5-turbo
-STEP 8 → Send reply back to user
-STEP 9 → Mark email as read
+Build or load FAISS vector index
+
+Authenticate Gmail
+
+Fetch unread emails
+
+Extract user query
+
+Search similar FAQ (FAISS)
+
+Generate reply using GPT-3.5-turbo
+
+Send reply via Gmail
+
+Mark email as read
+
+
+
 
 🧙 Configurable Parts
-➤ Filter emails by sender
-
-In get_unread_emails():
-
+Filter Emails by Sender or Subject
 query = "is:unread from:rsachink02@gmail.com"
 
 
-Change to:
+Other options:
 
 is:unread
-
 is:unread subject:HR
-
 from:*@company.com
 
-➤ Adjust FAISS match threshold
-threshold=2
+FAISS Match Threshold
+threshold = 2  # Lower → stricter, Higher → more lenient
+
+Change GPT Model
+model="gpt-3.5-turbo"  # Replace with other GPT models if needed
+🖥️ How It Works
+
+Fetch Emails: Reads unread emails using Microsoft Graph API.
+
+Extract Queries: Parses email content to extract user queries.
+
+Retrieve Knowledge: Performs similarity search on FAQs or documents using embeddings.
+
+Generate Response: AI creates context-aware replies using RAG & LLM.
+
+Send Reply: Sends email and updates status automatically.
+
+Track & Analyze: Stores query, response, and confidence in MySQL.
+
+📷 Screenshots
+![FAQs](images/FAQ.png)
+![query1](images/query_1.png)
+![output1](images/output_1.png)
+![query2](images/query_2.png)
+![output2](images/output_2.png)
 
 
-Lower → stricter
-Higher → more lenient
+🎯 Use Cases
 
-➤ Change GPT model
+Automate customer support emails
 
-Replace:
+Streamline sales workflow
 
-model="gpt-3.5-turbo"
+Extract knowledge from internal documents
 
-🛡 Safety Notes
-
-Gmail API requires secure storage of credentials.json
-
-Do not commit API keys or tokens to GitHub
-
-FAISS index refreshes automatically if you update FAQs
+Track query-response analytics
