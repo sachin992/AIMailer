@@ -138,3 +138,21 @@ npm run dev
 ## License
 
 Add your preferred license file before publishing (MIT is a common choice).
+
+## Screenshots
+
+### Login Page
+
+![Login Page](docs/LOGIN_Page.png)
+
+### Home Page
+
+![Home Page](docs/HOME_Page.png)
+
+### Analytics Page
+
+![Analytics Page](docs/ANALYTICS_Page.png)
+
+### Recent Email Page
+
+![Recent Email Page](docs/RECENT_EMAIL_Page.png)
