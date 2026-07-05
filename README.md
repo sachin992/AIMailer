@@ -1,160 +1,140 @@
-📈🤖 AIMailer – AI-Powered Email Automation
+# AIMailer
+
+Production-focused AI email automation system that combines Gmail ingestion, retrieval-augmented generation, confidence-based decisioning, and human-in-the-loop review.
+
+## GenAI Engineer Profile
+
+I built this project as a GenAI Engineer with emphasis on reliability, observability, and scalable workflow design.
+
+Core experience represented in this project and my stack:
+
+- LangChain for LLM orchestration patterns
+- LangGraph for stateful, multi-step agent workflows
+- LangSmith for tracing, evaluation, and observability
+- FastAPI and Flask for API-oriented AI services
+- RAG pipelines using embeddings and vector retrieval
+- Human-in-the-loop safety controls for production usage
 
+## What This System Does
 
+- Reads unread emails through Gmail API
+- Extracts user intent from incoming content
+- Retrieves relevant FAQ context with FAISS search
+- Generates grounded responses with OpenAI models
+- Auto-sends high-confidence responses
+- Routes uncertain responses for admin review
+- Stores processing history and metrics in SQLite
+- Serves admin operations through API + dashboard
 
+## Tech Stack
+
+- AI/LLM: OpenAI, LangChain, LangGraph
+- Observability: LangSmith-ready instrumentation stack
+- Backend APIs: Flask (current service), FastAPI-compatible architecture
+- Retrieval: FAISS, pandas, numpy
+- Security: JWT, bcrypt
+- Integrations: Gmail API OAuth2
+- Frontend: React, Vite, Nginx
+- Deployment: Docker Compose
 
+## Repository Structure
 
+```text
+AIMailer/
+|-- api_server.py
+|-- ai_generator.py
+|-- gmail_client.py
+|-- faq_manager.py
+|-- database.py
+|-- auth.py
+|-- config.py
+|-- bootstrap_admin.py
+|-- admin_cli.py
+|-- docker-compose.yml
+|-- Dockerfile
+|-- requirements.txt
+|-- faq.xlsx
+|-- admin-dashboard/
+|   |-- src/
+|   |-- Dockerfile
+|   `-- nginx.conf
+`-- templates/
+	`-- email/default.html
+```
 
+## Prerequisites
 
+- Python 3.12+
+- Docker Desktop
+- Gmail OAuth credentials file (`credentials.json`)
+- OpenAI API key
 
-AIMailer is an AI-powered assistant that automates email processing, generates context-aware responses using AI, and integrates with a knowledge base for accurate answers. 
+## Environment Setup
 
-🚀 Features
+1. Create environment file:
 
-📧 Automatic Email Processing – Fetch unread emails and extract user queries.
+```bash
+copy .env.example .env
+```
 
-🧠 AI-Powered Responses – Use embeddings, RAG, and LLMs to generate accurate replies.
+2. Update mandatory values in `.env`:
 
-📚 Knowledge Base Integration – Search FAQs, documents, and internal resources.
+```env
+OPENAI_API_KEY=your_openai_api_key
+GMAIL_CREDENTIALS_FILE=credentials.json
+EMAIL_WHITELIST=example1@gmail.com,example2@gmail.com
+```
 
-⚡ Workflow Automation – Update email status (read/replied/pending) automatically.
+3. Ensure these files exist in project root:
 
+- `credentials.json`
+- `faq.xlsx`
 
+## Run With Docker
 
+```bash
+docker compose up -d --build
+```
 
-🛠 Tech Stack
-<p> </a> <a href="https://streamlit.io/" target="_blank"><img src="https://streamlit.io/images/brand/streamlit-mark-color.svg" width="40" height="40" alt="Streamlit"/></a> 
-🧱 Project Structure
-AI Mailer Bot
-│
-├── faq.xlsx               # Your FAQ database
-├── faq.index              # FAISS Vector Index (auto-created)
-├── token.json             # Gmail API token (auto-generated)
-├── credentials.json       # Gmail OAuth credentials (you provide)
-├── main.py                # AI Mailer BOT script
-└── README.md              # Project documentation
+Endpoints:
 
-🔧 Setup Instructions
+- API: `http://localhost:5000`
+- Admin Dashboard: `http://localhost:3000`
 
-1️⃣ Clone the repository
+Stop:
 
-git clone https://github.com/<username>/<repo>.git
+```bash
+docker compose down
+```
 
+## Run Locally
 
+```bash
+pip install -r requirements.txt
+python api_server.py
+```
 
-2️⃣ Create & activate virtual environment
+For dashboard development:
 
-python -m venv venv
-source venv/bin/activate     # Mac/Linux
-venv\Scripts\activate        # Windows
+```bash
+cd admin-dashboard
+npm install
+npm run dev
+```
 
-Installation & Setup
-1️⃣ Install Python Dependencies
-pip install openai google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2 faiss-cpu pandas numpy
+## Security Checklist Before GitHub Push
 
-2️⃣ Setup Gmail API Credentials
+- Do not commit `.env`, `token.json`, or `credentials.json`
+- Rotate any leaked API keys immediately
+- Replace placeholder JWT secrets for non-local environments
 
-Go to Google Cloud Console
-.
+## Why This Project Is Portfolio-Ready
 
-Enable Gmail API.
+- Real-world GenAI workflow with retrieval + generation + review loop
+- Practical automation with measurable confidence routing
+- Strong production engineering focus (auth, logging, analytics, deployment)
+- Clean separation of data, model logic, API layer, and admin UI
 
-Create OAuth client ID → Desktop App.
+## License
 
-Download credentials.json into the project folder.
-
-3️⃣ Add Your FAQ Excel File
-
-Create faq.xlsx with columns: Question and Answer.
-
-4️⃣ Add OpenAI API Key
-
-In the script:
-
-OPENAI_API_KEY = "your-key-here"
-
-
-Or via environment variable:
-
-export OPENAI_API_KEY="your-key-here"
-
-▶️ Running the BOT
-python main.py
-
-
-On first run, a browser window opens for Gmail login.
-
-token.json is generated automatically.
-
-Subsequent runs do not require login.
-
-🔄 Workflow
-
-Load FAQ Excel
-
-Build or load FAISS vector index
-
-Authenticate Gmail
-
-Fetch unread emails
-
-Extract user query
-
-Search similar FAQ (FAISS)
-
-Generate reply using GPT-3.5-turbo
-
-Send reply via Gmail
-
-Mark email as read
-
-
-
-
-🧙 Configurable Parts
-Filter Emails by Sender or Subject
-query = "is:unread from:rsachink02@gmail.com"
-
-
-Other options:
-
-is:unread
-is:unread subject:HR
-from:*@company.com
-
-FAISS Match Threshold
-threshold = 2  # Lower → stricter, Higher → more lenient
-
-Change GPT Model
-model="gpt-3.5-turbo"  # Replace with other GPT models if needed
-🖥️ How It Works
-
-Fetch Emails: Reads unread emails using Microsoft Graph API.
-
-Extract Queries: Parses email content to extract user queries.
-
-Retrieve Knowledge: Performs similarity search on FAQs or documents using embeddings.
-
-Generate Response: AI creates context-aware replies using RAG & LLM.
-
-Send Reply: Sends email and updates status automatically.
-
-Track & Analyze: Stores query, response, and confidence in MySQL.
-
-📷 Screenshots
-![FAQs](images/FAQ.png)
-![query1](images/query_1.png)
-![output1](images/output_1.png)
-![query2](images/query_2.png)
-![output2](images/output_2.png)
-
-
-🎯 Use Cases
-
-Automate customer support emails
-
-Streamline sales workflow
-
-Extract knowledge from internal documents
-
-Track query-response analytics
+Add your preferred license file before publishing (MIT is a common choice).

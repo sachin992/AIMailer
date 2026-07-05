@@ -1,0 +1,34 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aimailer-backend
+    env_file:
+      - .env
+    environment:
+      - ADMIN_API_PORT=5000
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./aimailer.db:/app/aimailer.db
+      - ./faq.xlsx:/app/faq.xlsx
+      - ./faq.index:/app/faq.index
+      - ./credentials.json:/app/credentials.json
+      - ./token.json:/app/token.json
+      - ./logs:/app/logs
+      - ./templates:/app/templates
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./admin-dashboard
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: /api
+    container_name: aimailer-frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    restart: unless-stopped

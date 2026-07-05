@@ -1,0 +1,26 @@
+# VCS
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite
+pyvenv/
+venv/
+.env
+
+# Local runtime artifacts
+logs/
+token.json
+
+# Frontend build output
+admin-dashboard/node_modules/
+admin-dashboard/dist/
+
+# Editor
+.vscode/
+.idea/
