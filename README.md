@@ -135,9 +135,6 @@ npm run dev
 - Strong production engineering focus (auth, logging, analytics, deployment)
 - Clean separation of data, model logic, API layer, and admin UI
 
-## License
-
-Add your preferred license file before publishing (MIT is a common choice).
 
 ## Screenshots
 
